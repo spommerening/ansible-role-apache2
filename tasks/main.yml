@@ -1,0 +1,88 @@
+---
+- name: Install Apache2 package
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - apache2
+
+- debug:
+    var: item
+  with_items: "{{ apache2_vhosts }}"
+
+- name: Create/update vhosts file
+  template:
+    src: vhosts.conf.j2
+    dest: "/etc/apache2/sites-available/{{ item.filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache2_vhosts }}"
+  notify: Restart apache2 systemd service
+
+- name: Disable apache2 vhosts
+  file:
+    path: "/etc/apache2/sites-enabled/{{ item }}"
+    state: absent
+  with_items: "{{ apache2_vhosts_disable }}"
+  notify: Restart apache2 systemd service
+
+- name: Enable apache2 vhosts
+  file:
+    src: "/etc/apache2/sites-available/{{ item }}"
+    dest: "/etc/apache2/sites-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache2_vhosts_enable }}"
+  notify: Restart apache2 systemd service
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Disable apache2 modules
+  file:
+    path: "/etc/apache2/mods-enabled/{{ item }}"
+    state: absent
+  with_items: "{{ apache2_modules_disable }}"
+  notify: Restart apache2 systemd service
+
+- name: Enable apache2 modules
+  file:
+    src: "/etc/apache2/mods-available/{{ item }}"
+    dest: "/etc/apache2/mods-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache2_modules_enable }}"
+  notify: Restart apache2 systemd service
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Enable use of htaccess files
+  replace:
+    dest: /etc/apache2/apache2.conf
+    regexp: '<Directory /var/www/>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride None'
+    replace: '<Directory /var/www/>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride All'
+    backup: yes
+  when: apache2_htaccess|length > 0
+  notify: Restart apache2 systemd service
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Create/update htaccess files
+  template:
+    src: htaccess.j2
+    dest: "{{ item.pathname }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache2_htaccess }}"
+
+- name: Create/update htaccess userfiles
+  template:
+    src: htaccess.userfile.j2
+    dest: "{{ item.userfile }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache2_htaccess }}"
+
+- name: Start and enable apache2 systemd service
+  systemd:
+    name: apache2
+    enabled: yes
+    state: started

@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for user in item.entries %}
+{{ user.name }}:{{ user.pass }}
+{% endfor %}

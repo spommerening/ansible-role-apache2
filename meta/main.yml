@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  author: "Stefan Pommerening"
+  company: DMSP
+  license: 'BSD 2'
+  min_ansible_version: 2.3
+  platforms:
+   - name: Debian
+     versions:
+      - 9
+dependencies: []

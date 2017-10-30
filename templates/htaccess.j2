@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+AuthType Basic
+{% if item.authname is defined %}
+AuthName "{{ item.authname }}"
+{% endif %}
+AuthUserFile {{ item.userfile }}
+{% if item.groupfile is defined %}
+AuthGroupFile {{ item.groupfile }}
+{% endif %}
+require valid-user

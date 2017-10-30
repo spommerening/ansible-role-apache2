@@ -1,0 +1,45 @@
+# {{ ansible_managed }}
+
+<VirtualHost {{ item.vhost.ip }}:{{ item.vhost.port }}>
+{% if item.servername is defined %}
+    ServerName      {{ item.servername }}
+{% endif %}
+{% if item.serveralias is defined %}
+    ServerAliases   {{ item.serveraliases }}
+{% endif %}
+{% if item.serversignature is defined %}
+    ServerSignature {{ item.serversignature }}
+{% endif %}
+{% if item.documentroot is defined %}
+    DocumentRoot    {{ item.documentroot }}
+{% endif %}
+
+{% if item.redirect is defined %}
+{% for line in item.redirect %}
+    Redirect        {{ line.src }}  {{ line.dest }}
+{% endfor %}
+{% endif %}
+
+{% if item.config is defined %}
+{% for configline in item.config %}
+    {{ configline }}
+{% endfor %}
+{% endif %}
+
+{% if item.directory is defined %}
+{% for directory in item.directory %}
+    <Directory "{{ directory.name }}">
+{% for config in directory.config %}
+        {{ config }}
+{% endfor %}
+    </Directory>
+{% endfor %}
+{% endif %}
+
+{% if item.errorlog is defined %}
+    ErrorLog    "{{ item.errorlog }}"
+{% endif %}
+{% if item.customlog is defined %}
+    CustomLog   {{ item.customlog }}
+{% endif %}
+</VirtualHost>

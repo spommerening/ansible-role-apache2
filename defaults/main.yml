@@ -1,0 +1,7 @@
+---
+apache2_vhosts: []
+apache2_vhosts_enable: []
+apache2_vhosts_disable: []
+apache2_modules_enable: []
+apache2_modules_disable: []
+apache2_htaccess: []
