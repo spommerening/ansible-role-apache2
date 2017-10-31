@@ -81,6 +81,9 @@
     mode: 0644
   with_items: "{{ apache2_htaccess }}"
 
+- include: serverconfig.yml
+  with_items: "{{ apache2_config }}"
+
 - name: Start and enable apache2 systemd service
   systemd:
     name: apache2

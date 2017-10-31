@@ -1,0 +1,7 @@
+---
+- name: Update Apache2 server config item
+  lineinfile:
+    path: "{{ item.file }}"
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  notify: Restart apache2 systemd service
