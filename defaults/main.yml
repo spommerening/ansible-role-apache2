@@ -6,3 +6,4 @@ apache2_modules_enable: []
 apache2_modules_disable: []
 apache2_htaccess: []
 apache2_config: []
+apache2_certbot: false

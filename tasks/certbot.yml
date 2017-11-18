@@ -1,0 +1,9 @@
+---
+- name: Install Lets Encrypt Certbot
+  apt:
+    pkg: python-certbot-apache
+    state: installed
+    update_cache: yes
+
+# sudo certbot --apache certonly
+# certbot renew (in cronjob)

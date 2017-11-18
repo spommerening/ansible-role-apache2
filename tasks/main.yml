@@ -84,6 +84,9 @@
 - include: serverconfig.yml
   with_items: "{{ apache2_config }}"
 
+- include: certbot.yml
+  when: apache2_certbot
+
 - name: Start and enable apache2 systemd service
   systemd:
     name: apache2

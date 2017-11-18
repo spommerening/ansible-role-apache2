@@ -5,7 +5,7 @@
     ServerName      {{ item.servername }}
 {% endif %}
 {% if item.serveralias is defined %}
-    ServerAliases   {{ item.serveraliases }}
+    ServerAlias     {{ item.serveralias }}
 {% endif %}
 {% if item.serversignature is defined %}
     ServerSignature {{ item.serversignature }}
