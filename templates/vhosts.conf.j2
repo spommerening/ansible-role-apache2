@@ -20,6 +20,13 @@
 {% endfor %}
 {% endif %}
 
+{% if item.rewrite is defined %}
+    RewriteEngine On
+{% for rewriteline in item.rewrite %}
+    {{ rewriteline }}
+{% endfor %}
+{% endif %}
+
 {% if item.config is defined %}
 {% for configline in item.config %}
     {{ configline }}
