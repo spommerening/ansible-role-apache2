@@ -2,7 +2,18 @@
 
 This role installs and configures an Apache2 webserver on Debian Stretch (Debian 9.x).
 
-Example Yaml configuration:
+## apache2_listeners
+
+If this list is defined /etc/apache2/ports.conf will be overwritten using the
+values of this list.
+
+Example:
+
+    apache2_listeners:
+      - <ip-address>:<port>
+      - [...]
+
+## Example Yaml configuration:
 
 ````
 apache2_config:

@@ -11,6 +11,18 @@
     var: item
   with_items: "{{ apache2_vhosts }}"
 
+- name: Create/update apache2 listeners
+  template:
+    src: ports.conf.j2
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ apache2_listeners | default([]) }}"
+  when: apache2_listeners is defined
+  notify: Restart apache2 systemd service
+
 - name: Create/update vhosts file
   template:
     src: vhosts.conf.j2
