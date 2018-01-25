@@ -5,3 +5,4 @@
     regexp: "{{ item.regex }}"
     line: "{{ item.line }}"
   notify: Restart apache2 systemd service
+  ignore_errors: "{{ ansible_check_mode }}"
